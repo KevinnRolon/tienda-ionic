@@ -1,0 +1,7 @@
+{
+  "name": "mi-ecommerce",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
