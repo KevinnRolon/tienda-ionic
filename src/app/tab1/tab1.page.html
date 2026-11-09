@@ -1,15 +1,70 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Tab 1 </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Productos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="catalogo">
+    <section class="presentacion">
+      <p class="etiqueta">MI ECOMMERCE</p>
+      <h1>Explorá nuestro catálogo</h1>
+      <p>Buscá tus productos favoritos. Precios en USD.</p>
+    </section>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-searchbar
+      placeholder="Buscar por nombre o categoría"
+      [value]="busqueda()"
+      (ionInput)="busqueda.set($event.detail.value ?? '')"
+    >
+    </ion-searchbar>
+
+    @if (cargando()) {
+    <div class="estado" role="status">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando productos...</p>
+    </div>
+    } @else if (error()) {
+    <div class="estado" role="alert">
+      <p>{{ error() }}</p>
+      <ion-button (click)="cargarProductos()"> Reintentar </ion-button>
+    </div>
+    } @else {
+    <p class="resultados">{{ productosFiltrados().length }} productos encontrados</p>
+
+    <ion-grid>
+      <ion-row>
+        @for (producto of productosFiltrados(); track producto.id) {
+        <ion-col size="12" size-sm="6" size-lg="4">
+          <ion-card class="producto">
+            <img [src]="producto.thumbnail" [alt]="producto.title" loading="lazy" />
+
+            <ion-card-header>
+              <ion-chip>{{ producto.category }}</ion-chip>
+              <ion-card-title> {{ producto.title }} </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <p class="descripcion">{{ producto.description }}</p>
+
+              <p class="precio">{{ producto.price | currency:'USD':'code':'1.2-2' }}</p>
+
+              <ion-badge [color]="producto.stock > 0 ? 'success' : 'medium'">
+                {{ producto.stock > 0 ? 'Disponibles: ' + producto.stock : 'Agotado' }}
+              </ion-badge>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        } @empty {
+        <ion-col size="12">
+          <div class="estado">
+            <h2>No encontramos productos</h2>
+            <p>Probá con otro nombre o categoría.</p>
+          </div>
+        </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+    }
+  </div>
 </ion-content>
