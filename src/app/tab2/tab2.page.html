@@ -1,15 +1,87 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Tab 2 </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi carrito</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="contenedor">
+    @if (carrito.items().length === 0) {
+    <div class="vacio">
+      <h1>Tu carrito está vacío</h1>
+      <p>Agregá productos desde la pestaña Productos.</p>
+    </div>
+    } @else {
+    <h1>Tu selección</h1>
+    <p>{{ carrito.unidades() }} unidades en el carrito</p>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+    <ion-list>
+      @for (item of carrito.items(); track item.producto.id) {
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img [src]="item.producto.thumbnail" [alt]="item.producto.title" />
+        </ion-thumbnail>
+
+        <ion-label class="ion-text-wrap">
+          <h2>{{ item.producto.title }}</h2>
+
+          <p>Precio: {{ item.producto.price | currency:'USD':'code':'1.2-2' }}</p>
+
+          <p>Subtotal: {{ item.producto.price * item.cantidad | currency:'USD':'code':'1.2-2' }}</p>
+
+          <div class="cantidades">
+            <ion-button
+              size="small"
+              fill="outline"
+              [attr.aria-label]="'Restar una unidad de ' + item.producto.title"
+              (click)="carrito.restar(item.producto.id)"
+            >
+              −
+            </ion-button>
+
+            <strong>{{ item.cantidad }}</strong>
+
+            <ion-button
+              size="small"
+              fill="outline"
+              [attr.aria-label]="'Sumar una unidad de ' + item.producto.title"
+              [disabled]="item.cantidad >= item.producto.stock"
+              (click)="carrito.agregar(item.producto)"
+            >
+              +
+            </ion-button>
+
+            <ion-button size="small" fill="clear" color="danger" (click)="carrito.eliminar(item.producto.id)">
+              Quitar
+            </ion-button>
+          </div>
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
+
+    <ion-card>
+      <ion-card-content>
+        <p>Unidades: {{ carrito.unidades() }}</p>
+
+        <h2 class="total">Total: {{ carrito.total() | currency:'USD':'code':'1.2-2' }}</h2>
+
+        <p>Proyecto de práctica: no realiza cobros ni envíos.</p>
+
+        <ion-button expand="block" fill="outline" color="danger" (click)="confirmarVaciado.set(true)">
+          Vaciar carrito
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+    }
+  </div>
+
+  <ion-alert
+    [isOpen]="confirmarVaciado()"
+    header="¿Vaciar el carrito?"
+    message="Se quitarán todos los productos de tu selección."
+    [buttons]="botonesVaciar"
+    (didDismiss)="confirmarVaciado.set(false)"
+  >
+  </ion-alert>
 </ion-content>

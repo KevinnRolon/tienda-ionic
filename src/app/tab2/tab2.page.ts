@@ -1,14 +1,60 @@
-import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular';
+import { CurrencyPipe } from '@angular/common';
+import { Component, Inject, signal } from '@angular/core';
+import {
+  IonAlert,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonThumbnail,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular';
 
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { CarritoService } from '../services/carrito.service';
 
 @Component({
   selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent],
+  standalone: true,
+  templateUrl: './tab2.page.html',
+  styleUrls: ['./tab2.page.scss'],
+  imports: [
+    CurrencyPipe,
+    IonAlert,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonThumbnail,
+    IonTitle,
+    IonToolbar,
+  ],
 })
 export class Tab2Page {
-  constructor() {}
+  confirmarVaciado = signal(false);
+
+  readonly botonesVaciar = [
+    {
+      text: 'Cancelar',
+      role: 'cancel',
+    },
+    {
+      text: 'Vaciar',
+      role: 'destructive',
+      handler: () => this.carrito.vaciar(),
+    },
+  ];
+
+  constructor(
+    @Inject(CarritoService)
+    public carrito: CarritoService,
+  ) {}
 }

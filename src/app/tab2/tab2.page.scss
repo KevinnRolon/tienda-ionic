@@ -1,0 +1,61 @@
+.contenedor {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.vacio {
+  padding: 60px 16px;
+  text-align: center;
+}
+
+.vacio p {
+  color: var(--ion-color-medium);
+}
+
+ion-list {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+ion-thumbnail {
+  --size: 76px;
+
+  padding: 4px;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+ion-thumbnail img {
+  object-fit: contain;
+}
+
+ion-item {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+.cantidades {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+ion-card {
+  margin: 24px 0;
+  border-radius: 16px;
+}
+
+.total {
+  margin: 16px 0;
+  color: var(--ion-color-primary);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+ion-card-content > ion-button {
+  margin-top: 20px;
+}
