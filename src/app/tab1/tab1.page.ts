@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, signal, type OnInit } from '@angular/core';
+import { Component, computed, Inject, signal, type OnInit } from '@angular/core';
 import {
   IonBadge,
   IonButton,
@@ -21,6 +21,7 @@ import {
 import { finalize } from 'rxjs';
 
 import type { Producto } from '../models/producto';
+import { CarritoService } from '../services/carrito.service';
 import { ProductosService } from '../services/productos.service';
 
 @Component({
@@ -62,7 +63,12 @@ export class Tab1Page implements OnInit {
     );
   });
 
-  constructor(private productosService: ProductosService) {}
+  constructor(
+    @Inject(ProductosService)
+    private productosService: ProductosService,
+    @Inject(CarritoService)
+    public carrito: CarritoService,
+  ) {}
 
   ngOnInit(): void {
     this.cargarProductos();

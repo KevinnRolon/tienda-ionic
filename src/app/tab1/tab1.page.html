@@ -52,6 +52,17 @@
               <ion-badge [color]="producto.stock > 0 ? 'success' : 'medium'">
                 {{ producto.stock > 0 ? 'Disponibles: ' + producto.stock : 'Agotado' }}
               </ion-badge>
+              <div class="acciones">
+                <ion-button
+                  expand="block"
+                  [disabled]="carrito.cantidadDe(producto.id) >= producto.stock"
+                  (click)="carrito.agregar(producto)"
+                >
+                  Agregar al carrito
+                </ion-button>
+
+                <p class="en-carrito" aria-live="polite">En carrito: {{ carrito.cantidadDe(producto.id) }}</p>
+              </div>
             </ion-card-content>
           </ion-card>
         </ion-col>
