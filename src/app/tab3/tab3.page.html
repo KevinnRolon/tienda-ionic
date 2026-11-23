@@ -1,94 +1,126 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Mi perfil</ion-title>
+    <ion-title>NÓVRA</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="contenedor">
-    <section class="presentacion">
-      <h1>Tu espacio en NÓVRA</h1>
-      <p>Completá tus datos de demostración.</p>
-    </section>
+  <main class="contenedor">
+    <header class="presentacion">
+      <p class="etiqueta">TU ESPACIO PERSONAL</p>
+      <h1>A tu manera.</h1>
+      <p>Un pequeño espacio para darle tu identidad a NÓVRA.</p>
+    </header>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Datos del perfil</ion-card-title>
-      </ion-card-header>
+    <div class="distribucion">
+      <section class="panel-identidad" aria-label="Tu identidad en NÓVRA">
+        <div class="tarjeta-identidad">
+          <span class="marca">NÓVRA</span>
 
-      <ion-card-content>
-        <form #formulario="ngForm" (ngSubmit)="guardar(formulario)">
-          <ion-input
-            label="Nombre"
-            labelPlacement="stacked"
-            fill="outline"
-            placeholder="Escribí tu nombre"
-            name="nombre"
-            autocomplete="name"
-            [(ngModel)]="nombre"
-            #campoNombre="ngModel"
-            required
-            pattern=".*\S.*"
-            [maxlength]="80"
-          >
-          </ion-input>
+          <div class="avatar" aria-hidden="true">
+            @if (perfil(); as datos) { {{ datos.nombre.charAt(0).toUpperCase() }} } @else { N. }
+          </div>
 
-          @if (campoNombre.invalid && campoNombre.touched) {
-          <p class="error" role="alert">Escribí un nombre que no esté vacío.</p>
+          @if (perfil(); as datos) {
+          <p class="etiqueta">TU PERFIL</p>
+          <h2>Hola, {{ datos.nombre }}.</h2>
+          <p class="correo">{{ datos.email }}</p>
+          <span class="estado">Guardado en esta sesión</span>
+          } @else {
+          <p class="etiqueta">UN ESPACIO PARA VOS</p>
+          <h2>Tu nombre.<br />Tu estilo.</h2>
+          <p class="mensaje">Completá el formulario para crear tu perfil de demostración.</p>
           }
 
-          <ion-input
-            label="Correo electrónico"
-            labelPlacement="stacked"
-            fill="outline"
-            placeholder="nombre@ejemplo.com"
-            name="email"
-            type="email"
-            autocomplete="email"
-            [(ngModel)]="email"
-            #campoEmail="ngModel"
-            required
-            email
-            [maxlength]="254"
-          >
-          </ion-input>
+          <div class="firma">
+            <span>Descubrí lo que va con vos.</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+        </div>
 
-          @if (campoEmail.invalid && campoEmail.touched) {
-          <p class="error" role="alert">Escribí un correo electrónico válido.</p>
-          }
+        <div class="sobre-novra">
+          <h3>Lo cotidiano, con tu estilo.</h3>
+          <p>
+            Belleza, fragancias y productos para tu día a día. Explorá la colección y armá una selección que vaya con
+            vos.
+          </p>
+        </div>
+      </section>
 
-          <ion-button expand="block" type="submit" [disabled]="formulario.invalid"> Guardar perfil </ion-button>
-        </form>
-      </ion-card-content>
-    </ion-card>
+      <ion-card class="formulario">
+        <ion-card-header>
+          <p class="etiqueta">TUS DATOS</p>
+          <ion-card-title>Presentate.</ion-card-title>
+        </ion-card-header>
 
-    @if (perfil(); as datos) {
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Hola, {{ datos.nombre }}</ion-card-title>
-      </ion-card-header>
+        <ion-card-content>
+          <p class="descripcion-formulario">Podés usar datos ficticios para probar el formulario.</p>
 
-      <ion-card-content>
-        <p><strong>Correo:</strong> {{ datos.email }}</p>
-        <p>Tu perfil de demostración está guardado en esta sesión.</p>
-      </ion-card-content>
-    </ion-card>
-    }
+          <form #formulario="ngForm" (ngSubmit)="guardar(formulario)">
+            <ion-input
+              label="Nombre"
+              labelPlacement="stacked"
+              fill="outline"
+              placeholder="¿Cómo te llamás?"
+              name="nombre"
+              autocomplete="name"
+              [(ngModel)]="nombre"
+              #campoNombre="ngModel"
+              required
+              pattern=".*\S.*"
+              [maxlength]="80"
+            >
+            </ion-input>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Sobre NÓVRA</ion-card-title>
-      </ion-card-header>
+            @if (campoNombre.invalid && campoNombre.touched) {
+            <p class="error" role="alert">Escribí un nombre que no esté vacío.</p>
+            }
 
-      <ion-card-content>
-        <p>Belleza, fragancias y productos para tu día a día, en un solo lugar.</p>
-        <p>Explorá nuestro catálogo y armá una selección que vaya con vos.</p>
-      </ion-card-content>
-    </ion-card>
-  </div>
+            <ion-input
+              label="Correo electrónico"
+              labelPlacement="stacked"
+              fill="outline"
+              placeholder="nombre@ejemplo.com"
+              name="email"
+              type="email"
+              autocomplete="email"
+              [(ngModel)]="email"
+              #campoEmail="ngModel"
+              required
+              email
+              [maxlength]="254"
+            >
+            </ion-input>
+
+            @if (campoEmail.invalid && campoEmail.touched) {
+            <p class="error" role="alert">Escribí un correo electrónico válido.</p>
+            }
+
+            <ion-button expand="block" type="submit" [disabled]="formulario.invalid">
+              {{ perfil() ? 'Actualizar perfil' : 'Guardar perfil' }}
+            </ion-button>
+          </form>
+
+          <div class="nota">
+            <strong>Un perfil de demostración.</strong>
+            <p>
+              No crea una cuenta real. Los datos se conservan mientras la aplicación está abierta y se reinician al
+              recargar.
+            </p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <footer class="pie">
+      <strong>NÓVRA</strong>
+      <span>Tu espacio. Tu selección. Tu estilo.</span>
+    </footer>
+  </main>
+
   <ion-toast
     [isOpen]="avisoAbierto()"
-    message="Perfil guardado correctamente."
+    message="Tu perfil está listo."
     [duration]="2000"
     position="top"
     (didDismiss)="avisoAbierto.set(false)"
