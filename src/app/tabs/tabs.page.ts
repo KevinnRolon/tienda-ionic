@@ -1,38 +1,26 @@
-import { Component } from '@angular/core';
-import {
-  IonTabs,
-  IonTabBar,
-  IonTabButton,
-  IonIcon,
-  IonLabel,
-} from '@ionic/angular';
-
+import { Component, Inject } from '@angular/core';
+import { IonBadge, IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import {
-  storefrontOutline,
-  cartOutline,
-  personCircleOutline,
-} from 'ionicons/icons';
+import { cartOutline, personCircleOutline, storefrontOutline } from 'ionicons/icons';
+
+import { CarritoService } from '../services/carrito.service';
 
 @Component({
   selector: 'app-tabs',
   standalone: true,
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
-  imports: [
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonLabel,
-  ],
+  imports: [IonBadge, IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs],
 })
 export class TabsPage {
-  constructor() {
+  constructor(
+    @Inject(CarritoService)
+    public carrito: CarritoService,
+  ) {
     addIcons({
-      storefrontOutline,
       cartOutline,
       personCircleOutline,
+      storefrontOutline,
     });
   }
 }
