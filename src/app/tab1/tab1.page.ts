@@ -52,15 +52,41 @@ import { ProductosService } from '../services/productos.service';
 export class Tab1Page implements OnInit {
   productos = signal<Producto[]>([]);
   busqueda = signal('');
+  categoria = signal('');
+  orden = signal('relevancia');
   cargando = signal(true);
   error = signal('');
 
+  private readonly nombresCategorias: Record<string, string> = {
+    beauty: 'Belleza',
+    fragrances: 'Fragancias',
+    furniture: 'Hogar',
+    groceries: 'Alimentos',
+  };
+
+  categorias = computed(() => [...new Set(this.productos().map((producto) => producto.category))]);
+
   productosFiltrados = computed(() => {
     const texto = this.busqueda().trim().toLowerCase();
+    const categoria = this.categoria();
 
-    return this.productos().filter((producto) =>
-      `${producto.title} ${producto.category}`.toLowerCase().includes(texto),
-    );
+    const resultado = this.productos().filter((producto) => {
+      const contenido =
+        `${producto.title} ${producto.category} ${this.nombreCategoria(producto.category)}`.toLowerCase();
+
+      const coincideTexto = contenido.includes(texto);
+      const coincideCategoria = categoria === '' || producto.category === categoria;
+
+      return coincideTexto && coincideCategoria;
+    });
+
+    if (this.orden() === 'menor') {
+      resultado.sort((a, b) => a.price - b.price);
+    } else if (this.orden() === 'mayor') {
+      resultado.sort((a, b) => b.price - a.price);
+    }
+
+    return resultado;
   });
 
   constructor(
@@ -72,6 +98,16 @@ export class Tab1Page implements OnInit {
 
   ngOnInit(): void {
     this.cargarProductos();
+  }
+
+  nombreCategoria(categoria: string): string {
+    return this.nombresCategorias[categoria] ?? categoria;
+  }
+
+  limpiarFiltros(): void {
+    this.busqueda.set('');
+    this.categoria.set('');
+    this.orden.set('relevancia');
   }
 
   cargarProductos(): void {
@@ -86,7 +122,7 @@ export class Tab1Page implements OnInit {
           this.productos.set(productos);
         },
         error: () => {
-          this.error.set('No se pudieron cargar los productos. Revisá el archivo JSON e intentá nuevamente.');
+          this.error.set('No pudimos cargar la colección. Intentá nuevamente.');
         },
       });
   }

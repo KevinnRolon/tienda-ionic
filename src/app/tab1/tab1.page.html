@@ -5,77 +5,185 @@
 </ion-header>
 
 <ion-content>
-  <div class="catalogo">
-    <section class="presentacion">
-      <p class="etiqueta">NÓVRA</p>
-      <h1>Descubrí lo que va con vos.</h1>
-      <p>Explorá, elegí y armá tu selección. Precios en USD.</p>
+  <main class="catalogo">
+    <section class="portada" aria-labelledby="titulo-portada">
+      <div class="portada-texto">
+        <p class="etiqueta">BELLEZA · HOGAR · ESTILO</p>
+
+        <h1 id="titulo-portada">
+          Descubrí lo que<br />
+          <span>va con vos.</span>
+        </h1>
+
+        <p class="introduccion">
+          Objetos para tu rutina, tu espacio y tu forma de vivir. Encontrá tu próxima elección en NÓVRA.
+        </p>
+
+        <ion-button fill="outline" (click)="zonaCatalogo.scrollIntoView({ behavior: 'smooth', block: 'start' })">
+          Explorar colección ↗
+        </ion-button>
+
+        <div class="datos-portada">
+          <div>
+            <strong>{{ productos().length }}</strong>
+            <span>productos</span>
+          </div>
+
+          <div>
+            <strong>{{ categorias().length }}</strong>
+            <span>categorías</span>
+          </div>
+
+          <div>
+            <strong>{{ carrito.unidades() }}</strong>
+            <span>en tu carrito</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="destacado">
+        <span class="sello">EN EL CATÁLOGO</span>
+        <span class="marca-fondo" aria-hidden="true">NÓVRA</span>
+
+        @if (productos()[0]; as productoDestacado) {
+        <img class="imagen-destacada" [src]="productoDestacado.thumbnail" [alt]="productoDestacado.title" />
+
+        <div class="pie-destacado">
+          <div>
+            <span>{{ nombreCategoria(productoDestacado.category) }}</span>
+            <h2>{{ productoDestacado.title }}</h2>
+          </div>
+
+          <strong> {{ productoDestacado.price | currency:'USD':'code':'1.2-2' }} </strong>
+        </div>
+        } @else {
+        <span class="monograma" aria-hidden="true">N.</span>
+        }
+      </div>
     </section>
 
-    <ion-searchbar
-      placeholder="Buscar por nombre o categoría"
-      [value]="busqueda()"
-      (ionInput)="busqueda.set($event.detail.value ?? '')"
-    >
-    </ion-searchbar>
+    <section #zonaCatalogo class="coleccion" aria-labelledby="titulo-coleccion">
+      <div class="encabezado-coleccion">
+        <div>
+          <p class="etiqueta">LA COLECCIÓN</p>
+          <h2 id="titulo-coleccion">Tu próxima elección.</h2>
+        </div>
 
-    @if (cargando()) {
-    <div class="estado" role="status">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>Cargando productos...</p>
-    </div>
-    } @else if (error()) {
-    <div class="estado" role="alert">
-      <p>{{ error() }}</p>
-      <ion-button (click)="cargarProductos()"> Reintentar </ion-button>
-    </div>
-    } @else {
-    <p class="resultados">{{ productosFiltrados().length }} productos encontrados</p>
+        <span class="cantidad-resultados"> {{ productosFiltrados().length }} artículos </span>
+      </div>
 
-    <ion-grid>
-      <ion-row>
-        @for (producto of productosFiltrados(); track producto.id) {
-        <ion-col size="12" size-sm="6" size-lg="4">
-          <ion-card class="producto">
-            <img [src]="producto.thumbnail" [alt]="producto.title" loading="lazy" />
+      <div class="herramientas">
+        <ion-searchbar
+          placeholder="¿Qué estás buscando?"
+          [value]="busqueda()"
+          (ionInput)="busqueda.set($event.detail.value ?? '')"
+        >
+        </ion-searchbar>
 
-            <ion-card-header>
-              <ion-chip>{{ producto.category }}</ion-chip>
-              <ion-card-title> {{ producto.title }} </ion-card-title>
-            </ion-card-header>
+        <select
+          #selectorOrden
+          aria-label="Ordenar productos"
+          [value]="orden()"
+          (change)="orden.set(selectorOrden.value)"
+        >
+          <option value="relevancia">Orden original</option>
+          <option value="menor">Menor precio</option>
+          <option value="mayor">Mayor precio</option>
+        </select>
+      </div>
 
-            <ion-card-content>
-              <p class="descripcion">{{ producto.description }}</p>
+      <div class="categorias" role="group" aria-label="Filtrar por categoría">
+        <button
+          type="button"
+          [class.activa]="categoria() === ''"
+          [attr.aria-pressed]="categoria() === ''"
+          (click)="categoria.set('')"
+        >
+          Todo
+        </button>
 
-              <p class="precio">{{ producto.price | currency:'USD':'code':'1.2-2' }}</p>
+        @for (tipo of categorias(); track tipo) {
+        <button
+          type="button"
+          [class.activa]="categoria() === tipo"
+          [attr.aria-pressed]="categoria() === tipo"
+          (click)="categoria.set(tipo)"
+        >
+          {{ nombreCategoria(tipo) }}
+        </button>
+        }
+      </div>
 
-              <ion-badge [color]="producto.stock > 0 ? 'success' : 'medium'">
-                {{ producto.stock > 0 ? 'Disponibles: ' + producto.stock : 'Agotado' }}
-              </ion-badge>
-              <div class="acciones">
+      @if (cargando()) {
+      <div class="estado" role="status">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Preparando la colección...</p>
+      </div>
+      } @else if (error()) {
+      <div class="estado" role="alert">
+        <h2>Algo salió mal.</h2>
+        <p>{{ error() }}</p>
+        <ion-button (click)="cargarProductos()">Reintentar</ion-button>
+      </div>
+      } @else {
+      <ion-grid>
+        <ion-row>
+          @for (producto of productosFiltrados(); track producto.id) {
+          <ion-col size="12" size-sm="6" size-lg="4">
+            <ion-card class="producto">
+              <div class="foto-producto">
+                <img [src]="producto.thumbnail" [alt]="producto.title" loading="lazy" />
+              </div>
+
+              <ion-card-header>
+                <ion-chip> {{ nombreCategoria(producto.category) }} </ion-chip>
+
+                <ion-card-title> {{ producto.title }} </ion-card-title>
+              </ion-card-header>
+
+              <ion-card-content>
+                <p class="descripcion">{{ producto.description }}</p>
+
+                <div class="precio-disponibilidad">
+                  <strong class="precio"> {{ producto.price | currency:'USD':'code':'1.2-2' }} </strong>
+
+                  <ion-badge [color]="producto.stock > 0 ? 'success' : 'medium'">
+                    {{ producto.stock > 0 ? producto.stock + ' disponibles' : 'Agotado' }}
+                  </ion-badge>
+                </div>
+
                 <ion-button
                   expand="block"
                   [disabled]="carrito.cantidadDe(producto.id) >= producto.stock"
                   (click)="carrito.agregar(producto)"
                 >
-                  Agregar al carrito
+                  {{ producto.stock <= 0 ? 'Agotado' : carrito.cantidadDe(producto.id) >= producto.stock ? 'Límite
+                  alcanzado' : 'Agregar al carrito +' }}
                 </ion-button>
 
-                <p class="en-carrito" aria-live="polite">En carrito: {{ carrito.cantidadDe(producto.id) }}</p>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        } @empty {
-        <ion-col size="12">
-          <div class="estado">
-            <h2>No encontramos productos</h2>
-            <p>Probá con otro nombre o categoría.</p>
-          </div>
-        </ion-col>
-        }
-      </ion-row>
-    </ion-grid>
-    }
-  </div>
+                <p class="en-carrito" aria-live="polite">{{ carrito.cantidadDe(producto.id) }} en tu carrito</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          } @empty {
+          <ion-col size="12">
+            <div class="estado">
+              <h2>No encontramos tu próxima elección.</h2>
+              <p>Probá con otra búsqueda o categoría.</p>
+
+              <ion-button fill="outline" (click)="limpiarFiltros()"> Ver toda la colección </ion-button>
+            </div>
+          </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+      }
+    </section>
+
+    <footer class="pie">
+      <strong>NÓVRA</strong>
+      <span>Descubrí lo que va con vos.</span>
+      <small>Precios en USD · Tienda de demostración</small>
+    </footer>
+  </main>
 </ion-content>
