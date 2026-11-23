@@ -32,6 +32,66 @@
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import '@ionic/angular/css/palettes/dark.always.css';
+ion-card {
+  border: 1px solid #292929;
+  box-shadow: none;
+}
+
+ion-card-title {
+  color: #ffffff;
+}
+
+ion-card-content {
+  color: #b5b5b5;
+}
+
+ion-button {
+  --border-radius: 8px;
+  --box-shadow: none;
+
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+ion-searchbar {
+  --background: #111111;
+  --color: #ffffff;
+  --placeholder-color: #969696;
+  --icon-color: #b5b5b5;
+  --border-radius: 10px;
+  --box-shadow: none;
+}
+
+ion-chip {
+  --background: #1a1a1a;
+  --color: #d4d4d4;
+
+  border: 1px solid #333333;
+}
+
+ion-input {
+  --border-color: #3a3a3a;
+  --highlight-color-focused: #ffffff;
+}
+
+ion-tab-bar {
+  min-height: 68px;
+}
+
+ion-tab-button {
+  --color: #969696;
+  --color-selected: #ffffff;
+}
+
+ion-tab-button ion-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+ion-badge {
+  border-radius: 6px;
+}
