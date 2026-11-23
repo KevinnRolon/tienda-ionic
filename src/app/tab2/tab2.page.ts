@@ -1,5 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   IonAlert,
   IonButton,
@@ -23,6 +24,7 @@ import { CarritoService } from '../services/carrito.service';
   templateUrl: './tab2.page.html',
   styleUrls: ['./tab2.page.scss'],
   imports: [
+    RouterLink,
     CurrencyPipe,
     IonAlert,
     IonButton,
