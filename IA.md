@@ -76,3 +76,8 @@ También se realizaron comprobaciones funcionales con asistencia de Codex sobre:
 La ayuda de IA fue moderada tanto en la implementación como en el diseño y la documentación.
 
 Este registro declara esa asistencia.
+
+## Evidencias y aplicación Android
+
+El autor generó la APK en Android Studio, comprobó su funcionamiento en el emulador y la publicó en GitHub Releases. Codex verificó la firma del archivo y comprobó que la APK publicada coincidiera con la generada.
+
