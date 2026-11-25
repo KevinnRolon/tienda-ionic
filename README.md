@@ -137,3 +137,7 @@ El carrito y el perfil se conservan al cambiar de pestaña mientras la aplicaci�
 ## Uso de inteligencia artificial
 
 Durante el desarrollo se utilizó Codex de OpenAI. El detalle de la asistencia, las solicitudes principales y las correcciones se documenta en `IA.md`.
+
+## PDF de evidencias de uso
+
+[Ver las capturas de Productos, Carrito y Perfil en un escenario de uso](docs/entrega/NOVRA-evidencias-de-uso.pdf).
